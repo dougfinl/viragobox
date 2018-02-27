@@ -1,0 +1,4 @@
+DOXYFILE_ENCODING = UTF-8
+
+PROJECT_NAME = "Virago Rear Projection Renderer"
+
