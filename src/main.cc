@@ -1,12 +1,12 @@
 #include <iostream>
-#include "SFMLRenderer.h"
+#include "ViragoBox.h"
 
 
 using namespace virago;
 
 int main(int argc, char** argv) {
-    SFMLRenderer r;
-    r.start();
+    ViragoBox vb;
+    vb.run();
 
     return EXIT_SUCCESS;
 }
