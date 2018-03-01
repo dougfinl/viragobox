@@ -53,7 +53,7 @@ void DMXListener::Stop() {
 
 float DMXListener::getValue(const unsigned short address, const bool isFine) const {
     float value;
-    auto rawValue = this->getRawValue(address, isFine);
+    float rawValue = this->getRawValue(address, isFine);
     
     if (isFine) {
         value = rawValue / 65535;
@@ -99,6 +99,8 @@ void DMXListener::onUniverseRegister(const ola::client::Result &result) {
 void DMXListener::onDMXReceived(const ola::client::DMXMetadata &metadata, const ola::DmxBuffer &data) {
     unsigned int length;
     data.Get(_universeData, &length);
+
+    this->newDataReceived();
 }
 
 uint8_t DMXListener::getByte(const unsigned short address) const {

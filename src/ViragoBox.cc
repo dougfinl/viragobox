@@ -9,8 +9,11 @@
 
 namespace virago {
 
-ViragoBox::ViragoBox() {
+ViragoBox::ViragoBox(const unsigned int startAddress) {
     initLogging(true);
+
+    _address = startAddress;
+    _rectangle = std::make_shared<Rectangle>();
 }
 
 ViragoBox::~ViragoBox() {
@@ -18,6 +21,25 @@ ViragoBox::~ViragoBox() {
 
 void ViragoBox::run() {
     DMXListener dmx(1);
+
+    dmx.newDataReceived = [&dmx,this]() {
+        Rectangle newRect;
+
+        // Populate the rectangle's values
+        float intens          = dmx.getValue(_address+1,  false);
+        newRect.pos.x         = dmx.getValue(_address+2,  true);
+        newRect.pos.y         = dmx.getValue(_address+4,  true);
+        newRect.size.width    = dmx.getValue(_address+6,  true);
+        newRect.size.height   = dmx.getValue(_address+8,  true);
+        newRect.color.r       = dmx.getValue(_address+10, false);
+        newRect.color.g       = dmx.getValue(_address+11, false);
+        newRect.color.b       = dmx.getValue(_address+12, false);
+        newRect.lineThickness = dmx.getValue(_address+13, false);
+
+        // Update the value of the existing rectangle
+        *_rectangle = newRect;
+    };
+
     dmx.Start();
 
     SFMLRenderer r;

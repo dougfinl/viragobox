@@ -5,7 +5,7 @@
 using namespace virago;
 
 int main(int argc, char** argv) {
-    ViragoBox vb;
+    ViragoBox vb(1);
     vb.run();
 
     return EXIT_SUCCESS;

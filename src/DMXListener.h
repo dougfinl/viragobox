@@ -6,6 +6,7 @@
 #include <ola/client/ClientWrapper.h>
 #include <ola/thread/Thread.h>
 #include <ola/StringUtils.h>
+#include <functional>
 
 
 class DMXListener : public ola::thread::Thread {
@@ -18,6 +19,8 @@ class DMXListener : public ola::thread::Thread {
 
         float getValue(const unsigned short address, const bool isFine) const;
         unsigned int getRawValue(const unsigned short address, const bool isFine) const;
+
+        std::function<void()> newDataReceived;
 
     private:
         virtual void* Run();
