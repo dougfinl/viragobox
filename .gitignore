@@ -2,5 +2,8 @@ build/*
 lib/*
 bin/*
 
+# Pre-compiled headers
+*.h.gch
+
 # Mac OSX-specific
 .DS_Store

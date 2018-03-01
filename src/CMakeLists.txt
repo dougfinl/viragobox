@@ -8,7 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
 
-set(SOURCES main.cc ViragoBox.h ViragoBox.cc SFMLRenderer.h SFMLRenderer.cc DMXListener.h DMXListener.cc)
+set(SOURCES main.cc ViragoBox.h ViragoBox.cc SFMLRenderer.h SFMLRenderer.cc DMXListener.h DMXListener.cc OLABoostLogDestination.h OLABoostLogDestination.cc)
 
 include_directories(include)
 
@@ -25,6 +25,12 @@ pkg_check_modules(OLA REQUIRED libola)
 target_include_directories(virago PUBLIC ${OLA_INCLUDE_DIRS})
 target_link_libraries(virago ${OLA_LIBRARIES})
 target_compile_options(virago PUBLIC ${OLA_CFLAGS_OTHER})
+
+# Boost
+add_definitions(-DBOOST_LOG_DYN_LINK)
+find_package(Boost 1.66 COMPONENTS log REQUIRED)
+target_include_directories(virago PUBLIC ${Boost_INCLUDE_DIR})
+target_link_libraries(virago ${Boost_LIBRARIES})
 
 install(TARGETS virago DESTINATION bin)
 

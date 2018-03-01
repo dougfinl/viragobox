@@ -10,6 +10,9 @@ class ViragoBox {
         ~ViragoBox();
 
         void run();
+
+    private:
+        void initLogging(const bool debug);
 };
 
 }
