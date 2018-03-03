@@ -67,9 +67,9 @@ float DMXListener::getValue(const unsigned short address, const bool isFine) con
 unsigned int DMXListener::getRawValue(const unsigned short address, const bool isFine) const {
     unsigned int value; 
 
-    value = this->getByte(address);
+    value = (unsigned int) this->getByte(address);
     if (isFine) {
-        value = value<<8 | this->getByte(address+1);
+        value = value<<8 | (unsigned int) this->getByte(address+1);
     }
 
     return value;
