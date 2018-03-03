@@ -20,7 +20,7 @@ DMXListener::~DMXListener() {
 }
 
 bool DMXListener::Start() {
-    BOOST_LOG_TRIVIAL(info) << "Initialising the Open Lighting Architecture";
+    BOOST_LOG_TRIVIAL(debug) << "Initialising OLA";
     ola::InitLogging(ola::OLA_LOG_MAX, _logDestination);
 
     _wrapper = new ola::client::OlaClientWrapper;
@@ -38,17 +38,17 @@ bool DMXListener::Start() {
     _client->SetUniverseName(_universe, universeName.str(), ola::NewSingleCallback(this, &DMXListener::onUniverseName));
     _client->SetDMXCallback(ola::NewCallback(this, &DMXListener::onDMXReceived));
 
-    BOOST_LOG_TRIVIAL(info) << "DONE";
+    BOOST_LOG_TRIVIAL(debug) << "DONE";
 
     return ola::thread::Thread::Start();
 }
 
 void DMXListener::Stop() {
-    BOOST_LOG_TRIVIAL(info) << "Terminating OLA";
+    BOOST_LOG_TRIVIAL(debug) << "Terminating OLA";
 
     _wrapper->GetSelectServer()->Terminate();
     
-    BOOST_LOG_TRIVIAL(info) << "DONE";
+    BOOST_LOG_TRIVIAL(debug) << "DONE";
 }
 
 float DMXListener::getValue(const unsigned short address, const bool isFine) const {
