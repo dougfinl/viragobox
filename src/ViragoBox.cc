@@ -1,46 +1,42 @@
 #include "ViragoBox.h"
-#include "SFMLRenderer.h"
-#include "DMXListener.h"
 #include <boost/log/utility/setup.hpp>
 #include <boost/log/trivial.hpp>
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/expressions.hpp>
-#include <algorithm>
 
 
 namespace virago {
 
-ViragoBox::ViragoBox(const unsigned int startAddress) {
-    initLogging(true);
+ViragoBox::ViragoBox(const ViragoBoxOptions options) {
+    initLogging(options.debug);
 
-    _address = startAddress;
+    _renderer = std::make_unique<SFMLRenderer>(options.resX, options.resY, options.fullscreen);
+    _dmx      = std::make_unique<DMXListener>(options.address);
+
+    _dmx->newDataReceived = [options,this]() {
+        float intens = _dmx->getValue(options.address,    false);
+        float posX   = _dmx->getValue(options.address+1,  true);
+        float posY   = _dmx->getValue(options.address+3,  true);
+        float width  = _dmx->getValue(options.address+5,  true);
+        float height = _dmx->getValue(options.address+7,  true);
+        float red    = _dmx->getValue(options.address+9,  false);
+        float green  = _dmx->getValue(options.address+10, false);
+        float blue   = _dmx->getValue(options.address+11, false);
+        float line   = _dmx->getValue(options.address+12, false);
+
+        _renderer->updateRectangleFromPercentages(intens, posX, posY, width, height, red, green, blue, line);
+    };
 }
 
 ViragoBox::~ViragoBox() {
 }
 
 void ViragoBox::run() {
-    DMXListener dmx(1);
-    SFMLRenderer r;
+    _dmx->Start();
+    _renderer->start();
 
-    dmx.newDataReceived = [&dmx,&r,this]() {
-        float intens = dmx.getValue(_address,    false);
-        float posX   = dmx.getValue(_address+1,  true);
-        float posY   = dmx.getValue(_address+3,  true);
-        float width  = dmx.getValue(_address+5,  true);
-        float height = dmx.getValue(_address+7,  true);
-        float red    = dmx.getValue(_address+9,  false);
-        float green  = dmx.getValue(_address+10, false);
-        float blue   = dmx.getValue(_address+11, false);
-        float line   = dmx.getValue(_address+12, false);
-
-        r.updateRectangleFromPercentages(intens, posX, posY, width, height, red, green, blue, line);
-    };
-
-    dmx.Start();
-    r.start();
-
-    dmx.Stop();
+    // Once the rendeder is closed...
+    _dmx->Stop();
 }
 
 void ViragoBox::initLogging(const bool debug) {

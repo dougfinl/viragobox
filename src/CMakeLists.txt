@@ -28,7 +28,7 @@ target_compile_options(virago PUBLIC ${OLA_CFLAGS_OTHER})
 
 # Boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
-find_package(Boost 1.66 COMPONENTS log REQUIRED)
+find_package(Boost 1.66 COMPONENTS log program_options REQUIRED)
 target_include_directories(virago PUBLIC ${Boost_INCLUDE_DIR})
 target_link_libraries(virago ${Boost_LIBRARIES})
 

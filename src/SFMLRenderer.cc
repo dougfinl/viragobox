@@ -5,7 +5,8 @@
 
 namespace virago {
 
-SFMLRenderer::SFMLRenderer() {
+SFMLRenderer::SFMLRenderer(const unsigned int resX, const unsigned int resY, const bool fullscreen) :
+        _resX(resX), _resY(resY), _fullscreen(fullscreen) {
     _rectangle = {
         1.0,
         Position{100, 100},
@@ -19,7 +20,11 @@ SFMLRenderer::~SFMLRenderer() {
 }
 
 void SFMLRenderer::start() {
-    _window.create(sf::VideoMode(800, 600), "Virago Rear Projection Renderer");
+    if (_fullscreen) {
+        _window.create(sf::VideoMode(_resX, _resY), "Virago Rear Projection Renderer", sf::Style::Fullscreen);
+    } else {
+        _window.create(sf::VideoMode(_resX, _resY), "Virago Rear Projection Renderer", sf::Style::Titlebar);
+    }
 
     return this->runLoop();
 }

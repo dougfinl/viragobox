@@ -9,7 +9,7 @@ namespace virago {
 
 class SFMLRenderer {
     public:
-        SFMLRenderer();
+        explicit SFMLRenderer(const unsigned int resX, const unsigned int resY, const bool fullscreen);
         ~SFMLRenderer();
 
         void start();
@@ -20,8 +20,11 @@ class SFMLRenderer {
     private:
         void runLoop();
 
+        unsigned int     _resX;
+        unsigned int     _resY;
+        bool             _fullscreen;
         sf::RenderWindow _window;
-        Rectangle _rectangle;
+        Rectangle        _rectangle;
 };
 
 } // namespace virago
