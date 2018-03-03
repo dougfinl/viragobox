@@ -5,6 +5,7 @@
 #include <boost/log/trivial.hpp>
 #include <boost/log/support/date_time.hpp>
 #include <boost/log/expressions.hpp>
+#include <algorithm>
 
 
 namespace virago {
@@ -13,7 +14,6 @@ ViragoBox::ViragoBox(const unsigned int startAddress) {
     initLogging(true);
 
     _address = startAddress;
-    _rectangle = std::make_shared<Rectangle>();
 }
 
 ViragoBox::~ViragoBox() {
@@ -21,28 +21,23 @@ ViragoBox::~ViragoBox() {
 
 void ViragoBox::run() {
     DMXListener dmx(1);
+    SFMLRenderer r;
 
-    dmx.newDataReceived = [&dmx,this]() {
-        Rectangle newRect;
+    dmx.newDataReceived = [&dmx,&r,this]() {
+        float intens = dmx.getValue(_address,    false);
+        float posX   = dmx.getValue(_address+1,  true);
+        float posY   = dmx.getValue(_address+3,  true);
+        float width  = dmx.getValue(_address+5,  true);
+        float height = dmx.getValue(_address+7,  true);
+        float red    = dmx.getValue(_address+9,  false);
+        float green  = dmx.getValue(_address+10, false);
+        float blue   = dmx.getValue(_address+11, false);
+        float line   = dmx.getValue(_address+12, false);
 
-        // Populate the rectangle's values
-        float intens          = dmx.getValue(_address+1,  false);
-        newRect.pos.x         = dmx.getValue(_address+2,  true);
-        newRect.pos.y         = dmx.getValue(_address+4,  true);
-        newRect.size.width    = dmx.getValue(_address+6,  true);
-        newRect.size.height   = dmx.getValue(_address+8,  true);
-        newRect.color.r       = dmx.getValue(_address+10, false);
-        newRect.color.g       = dmx.getValue(_address+11, false);
-        newRect.color.b       = dmx.getValue(_address+12, false);
-        newRect.lineThickness = dmx.getValue(_address+13, false);
-
-        // Update the value of the existing rectangle
-        *_rectangle = newRect;
+        r.updateRectangleFromPercentages(intens, posX, posY, width, height, red, green, blue, line);
     };
 
     dmx.Start();
-
-    SFMLRenderer r;
     r.start();
 
     dmx.Stop();

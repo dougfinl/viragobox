@@ -1,6 +1,7 @@
 #ifndef SFML_RENDERER_H_
 #define SFML_RENDERER_H_
 
+#include "Shapes.h"
 #include <SFML/Graphics.hpp>
 
 
@@ -14,10 +15,13 @@ class SFMLRenderer {
         void start();
         void stop();
 
+        void updateRectangleFromPercentages(float intens, float posX, float posY, float width, float height, float r, float g, float b, float line);
+
     private:
         void runLoop();
 
         sf::RenderWindow _window;
+        Rectangle _rectangle;
 };
 
 } // namespace virago
