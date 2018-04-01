@@ -27,10 +27,12 @@ ViragoBox::ViragoBox(const ViragoBoxOptions options) {
         _renderer->updateRectangleFromPercentages(intens, posX, posY, width, height, red, green, blue, line);
 
         int control = _dmx->getRawValue(options.address+13, false);
-        if (control == 255) {
-            _renderer->showAlignmentGrid();
+        if (control == 254) {
+            _renderer->setRenderMode(SFMLRenderer::TEST_BARS);
+        } else if (control == 255) {
+            _renderer->setRenderMode(SFMLRenderer::TEST_GRID);
         } else {
-            _renderer->showAlignmentGrid(false);
+            _renderer->setRenderMode(SFMLRenderer::NORMAL);
         }
     };
 }

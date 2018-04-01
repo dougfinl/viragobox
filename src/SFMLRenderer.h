@@ -9,6 +9,12 @@ namespace virago {
 
 class SFMLRenderer {
     public:
+        enum RenderMode {
+            NORMAL,
+            TEST_BARS,
+            TEST_GRID
+        };
+
         explicit SFMLRenderer(const unsigned int resX, const unsigned int resY, const bool fullscreen);
         ~SFMLRenderer();
 
@@ -16,7 +22,7 @@ class SFMLRenderer {
         void stop();
 
         void updateRectangleFromPercentages(float intens, float posX, float posY, float width, float height, float r, float g, float b, float line);
-        void showAlignmentGrid(bool show=true);
+        void setRenderMode(RenderMode renderMode);
 
     private:
         void runLoop();
@@ -26,7 +32,7 @@ class SFMLRenderer {
         bool             _fullscreen;
         sf::RenderWindow _window;
         Rectangle        _rectangle;
-        bool             _showAlignmentGrid;
+        RenderMode       _renderMode;
 };
 
 } // namespace virago

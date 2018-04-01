@@ -6,7 +6,7 @@
 namespace virago {
 
 SFMLRenderer::SFMLRenderer(const unsigned int resX, const unsigned int resY, const bool fullscreen) :
-        _resX(resX), _resY(resY), _fullscreen(fullscreen), _showAlignmentGrid(false) {
+        _resX(resX), _resY(resY), _fullscreen(fullscreen), _renderMode(NORMAL) {
     _rectangle = {
         1.0,
         Position{100, 100},
@@ -52,8 +52,8 @@ void SFMLRenderer::updateRectangleFromPercentages(float intens, float posX, floa
     BOOST_LOG_TRIVIAL(trace) << "(" << _rectangle.color.r << "," << _rectangle.color.g << "," << _rectangle.color.b << ")";
 }
 
-void SFMLRenderer::showAlignmentGrid(bool show) {
-    _showAlignmentGrid = show;
+void SFMLRenderer::setRenderMode(RenderMode renderMode) {
+    _renderMode = renderMode;
 }
 
 void SFMLRenderer::runLoop() {
@@ -68,7 +68,18 @@ void SFMLRenderer::runLoop() {
 
         _window.clear(sf::Color::Black);
 
-        if (_showAlignmentGrid) {
+        if (_renderMode == NORMAL) {
+            // Render the normal rectangle
+            sf::RectangleShape rect;
+            rect.setOrigin(_rectangle.size.width/2, _rectangle.size.height/2);
+            rect.setPosition(sf::Vector2f(_rectangle.pos.x, _rectangle.pos.y));
+            rect.setSize(sf::Vector2f(_rectangle.size.width, _rectangle.size.height));
+            rect.setFillColor(sf::Color::Transparent);
+            rect.setOutlineColor(sf::Color(_rectangle.color.r, _rectangle.color.g, _rectangle.color.b));
+            rect.setOutlineThickness(_rectangle.lineThickness);
+
+            _window.draw(rect);
+        } else if (_renderMode == TEST_GRID) {
             int windowWidth  = _window.getSize().x;
             int windowHeight = _window.getSize().y;
 
@@ -108,17 +119,52 @@ void SFMLRenderer::runLoop() {
             _window.draw(horiz);
             _window.draw(vert);
             _window.draw(circ);
-        } else {
-            // Render the normal rectangle
-            sf::RectangleShape rect;
-            rect.setOrigin(_rectangle.size.width/2, _rectangle.size.height/2);
-            rect.setPosition(sf::Vector2f(_rectangle.pos.x, _rectangle.pos.y));
-            rect.setSize(sf::Vector2f(_rectangle.size.width, _rectangle.size.height));
-            rect.setFillColor(sf::Color::Transparent);
-            rect.setOutlineColor(sf::Color(_rectangle.color.r, _rectangle.color.g, _rectangle.color.b));
-            rect.setOutlineThickness(_rectangle.lineThickness);
+        } else if (_renderMode == TEST_BARS) {
+            int windowWidth7  = _window.getSize().x/7;
+            int windowHeight = _window.getSize().y;
 
-            _window.draw(rect);
+            sf::RectangleShape white;
+            white.setFillColor(sf::Color::White);
+            white.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            white.setPosition(sf::Vector2f(0, 0));
+            
+            sf::RectangleShape yellow;
+            yellow.setFillColor(sf::Color::Yellow);
+            yellow.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            yellow.setPosition(sf::Vector2f(windowWidth7, 0));
+
+            sf::RectangleShape cyan;
+            cyan.setFillColor(sf::Color::Cyan);
+            cyan.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            cyan.setPosition(sf::Vector2f(windowWidth7*2, 0));
+
+            sf::RectangleShape green;
+            green.setFillColor(sf::Color::Green);
+            green.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            green.setPosition(sf::Vector2f(windowWidth7*3, 0));
+
+            sf::RectangleShape magenta;
+            magenta.setFillColor(sf::Color::Magenta);
+            magenta.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            magenta.setPosition(sf::Vector2f(windowWidth7*4, 0));
+
+            sf::RectangleShape red;
+            red.setFillColor(sf::Color::Red);
+            red.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            red.setPosition(sf::Vector2f(windowWidth7*5, 0));
+
+            sf::RectangleShape blue;
+            blue.setFillColor(sf::Color::Blue);
+            blue.setSize(sf::Vector2f(windowWidth7, windowHeight));
+            blue.setPosition(sf::Vector2f(windowWidth7*6, 0));
+
+            _window.draw(white);
+            _window.draw(yellow);
+            _window.draw(cyan);
+            _window.draw(green);
+            _window.draw(magenta);
+            _window.draw(red);
+            _window.draw(blue);
         }
 
         _window.display();
