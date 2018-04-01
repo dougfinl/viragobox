@@ -6,7 +6,7 @@
 namespace virago {
 
 SFMLRenderer::SFMLRenderer(const unsigned int resX, const unsigned int resY, const bool fullscreen) :
-        _resX(resX), _resY(resY), _fullscreen(fullscreen) {
+        _resX(resX), _resY(resY), _fullscreen(fullscreen), _showAlignmentGrid(false) {
     _rectangle = {
         1.0,
         Position{100, 100},
@@ -52,6 +52,10 @@ void SFMLRenderer::updateRectangleFromPercentages(float intens, float posX, floa
     BOOST_LOG_TRIVIAL(trace) << "(" << _rectangle.color.r << "," << _rectangle.color.g << "," << _rectangle.color.b << ")";
 }
 
+void SFMLRenderer::showAlignmentGrid(bool show) {
+    _showAlignmentGrid = show;
+}
+
 void SFMLRenderer::runLoop() {
     while (_window.isOpen()) {
         sf::Event event;
@@ -64,15 +68,58 @@ void SFMLRenderer::runLoop() {
 
         _window.clear(sf::Color::Black);
 
-        sf::RectangleShape rect;
-        rect.setOrigin(_rectangle.size.width/2, _rectangle.size.height/2);
-        rect.setPosition(sf::Vector2f(_rectangle.pos.x, _rectangle.pos.y));
-        rect.setSize(sf::Vector2f(_rectangle.size.width, _rectangle.size.height));
-        rect.setFillColor(sf::Color::Transparent);
-        rect.setOutlineColor(sf::Color(_rectangle.color.r, _rectangle.color.g, _rectangle.color.b));
-        rect.setOutlineThickness(_rectangle.lineThickness);
+        if (_showAlignmentGrid) {
+            int windowWidth  = _window.getSize().x;
+            int windowHeight = _window.getSize().y;
 
-        _window.draw(rect);
+            // Extreme bounding box
+            sf::RectangleShape bounds;
+            bounds.setSize(sf::Vector2f(windowWidth-20, windowHeight-20));
+            bounds.setPosition(sf::Vector2f(10, 10));
+            bounds.setOutlineThickness(10);
+            bounds.setFillColor(sf::Color::Transparent);
+            bounds.setOutlineColor(sf::Color::Red);
+
+            // Horizonal centre line
+            sf::RectangleShape horiz;
+            horiz.setSize(sf::Vector2f(windowWidth, 0));
+            horiz.setPosition(sf::Vector2f(0, windowHeight/2));
+            horiz.setOutlineThickness(5);
+            horiz.setFillColor(sf::Color::Transparent);
+            horiz.setOutlineColor(sf::Color::Red);
+
+            // Vertical centre line
+            sf::RectangleShape vert;
+            vert.setSize(sf::Vector2f(0, windowHeight));
+            vert.setPosition(sf::Vector2f(windowWidth/2, 0));
+            vert.setOutlineThickness(5);
+            vert.setFillColor(sf::Color::Transparent);
+            vert.setOutlineColor(sf::Color::Red);
+
+            // Centre circle
+            int r = windowWidth/8;
+            sf::CircleShape circ(r);
+            circ.setPosition(sf::Vector2f(windowWidth/2-r, windowHeight/2-r));
+            circ.setOutlineThickness(10);
+            circ.setFillColor(sf::Color::Transparent);
+            circ.setOutlineColor(sf::Color::Red);
+
+            _window.draw(bounds);
+            _window.draw(horiz);
+            _window.draw(vert);
+            _window.draw(circ);
+        } else {
+            // Render the normal rectangle
+            sf::RectangleShape rect;
+            rect.setOrigin(_rectangle.size.width/2, _rectangle.size.height/2);
+            rect.setPosition(sf::Vector2f(_rectangle.pos.x, _rectangle.pos.y));
+            rect.setSize(sf::Vector2f(_rectangle.size.width, _rectangle.size.height));
+            rect.setFillColor(sf::Color::Transparent);
+            rect.setOutlineColor(sf::Color(_rectangle.color.r, _rectangle.color.g, _rectangle.color.b));
+            rect.setOutlineThickness(_rectangle.lineThickness);
+
+            _window.draw(rect);
+        }
 
         _window.display();
     }

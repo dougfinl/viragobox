@@ -25,6 +25,13 @@ ViragoBox::ViragoBox(const ViragoBoxOptions options) {
         float line   = _dmx->getValue(options.address+12, false);
 
         _renderer->updateRectangleFromPercentages(intens, posX, posY, width, height, red, green, blue, line);
+
+        int control = _dmx->getRawValue(options.address+13, false);
+        if (control == 255) {
+            _renderer->showAlignmentGrid();
+        } else {
+            _renderer->showAlignmentGrid(false);
+        }
     };
 }
 

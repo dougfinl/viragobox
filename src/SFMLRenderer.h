@@ -16,6 +16,7 @@ class SFMLRenderer {
         void stop();
 
         void updateRectangleFromPercentages(float intens, float posX, float posY, float width, float height, float r, float g, float b, float line);
+        void showAlignmentGrid(bool show=true);
 
     private:
         void runLoop();
@@ -25,6 +26,7 @@ class SFMLRenderer {
         bool             _fullscreen;
         sf::RenderWindow _window;
         Rectangle        _rectangle;
+        bool             _showAlignmentGrid;
 };
 
 } // namespace virago
