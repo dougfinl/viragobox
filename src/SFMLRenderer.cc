@@ -21,9 +21,9 @@ SFMLRenderer::~SFMLRenderer() {
 
 void SFMLRenderer::start() {
     if (_fullscreen) {
-        _window.create(sf::VideoMode(_resX, _resY), "Virago Rear Projection Renderer", sf::Style::Fullscreen);
+        _window.create(sf::VideoMode(_resX, _resY), "ViragoBox", sf::Style::Fullscreen);
     } else {
-        _window.create(sf::VideoMode(_resX, _resY), "Virago Rear Projection Renderer", sf::Style::Titlebar);
+        _window.create(sf::VideoMode(_resX, _resY), "ViragoBox", sf::Style::Titlebar);
     }
 
     return this->runLoop();

@@ -12,25 +12,25 @@ set(SOURCES main.cc ViragoBox.h ViragoBox.cc SFMLRenderer.h SFMLRenderer.cc DMXL
 
 include_directories(include)
 
-add_executable(virago ${SOURCES})
+add_executable(viragobox ${SOURCES})
 
 # SFML2
 find_package(SFML 2 REQUIRED system window graphics)
-target_include_directories(virago PUBLIC ${SFML_INCLUDE_DIR})
-target_link_libraries(virago ${SFML_LIBRARIES})
+target_include_directories(viragobox PUBLIC ${SFML_INCLUDE_DIR})
+target_link_libraries(viragobox ${SFML_LIBRARIES})
 
 # OLA
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(OLA REQUIRED libola)
-target_include_directories(virago PUBLIC ${OLA_INCLUDE_DIRS})
-target_link_libraries(virago ${OLA_LIBRARIES})
-target_compile_options(virago PUBLIC ${OLA_CFLAGS_OTHER})
+target_include_directories(viragobox PUBLIC ${OLA_INCLUDE_DIRS})
+target_link_libraries(viragobox ${OLA_LIBRARIES})
+target_compile_options(viragobox PUBLIC ${OLA_CFLAGS_OTHER})
 
 # Boost
 add_definitions(-DBOOST_LOG_DYN_LINK)
 find_package(Boost 1.62 COMPONENTS log program_options REQUIRED)
-target_include_directories(virago PUBLIC ${Boost_INCLUDE_DIR})
-target_link_libraries(virago ${Boost_LIBRARIES})
+target_include_directories(viragobox PUBLIC ${Boost_INCLUDE_DIR})
+target_link_libraries(viragobox ${Boost_LIBRARIES})
 
-install(TARGETS virago DESTINATION bin)
+install(TARGETS viragobox DESTINATION bin)
 
