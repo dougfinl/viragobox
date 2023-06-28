@@ -1,6 +1,6 @@
 # ViragoBox
 
-ViragoBox is a DMX-controlled video renderer for Sonia Sabri's contemporary dance piece [*Virago*](http://www.ssco.org.uk/productions/productions/productions/virago.php). It can run either as a desktop application, or directly from the command-line without a window manager (Linux only).
+ViragoBox is a DMX-controlled video renderer for Sonia Sabri's contemporary dance piece [*Virago*](https://www.ssco.org.uk/productions/touring/virago/virago.php). It can run either as a desktop application, or directly from the command-line without a window manager (Linux only).
 
 ## Building ViragoBox (Linux, macOS)
 
